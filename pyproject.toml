@@ -8,6 +8,11 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
+    'numpy>=1.19.3',
+    'torch>=1.8',
+    'torchvision>=0.9',
+    'lightning>=2.5.1',
+    'segmentation-models-pytorch>=0.4.0'
 ]
 
 [tool.poetry]
@@ -15,5 +20,11 @@ packages = [{include = "ceia_final_project", from = "src"}]
 
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ['setuptools>=61']
+build-backend = 'setuptools.build_meta'
+
+[tool.setuptools.dynamic]
+version = {attr = 'ceia_final_project.__version__.__version__'}
+
+[tool.setuptools.packages.find]
+include = ['ceia_final_project*']
