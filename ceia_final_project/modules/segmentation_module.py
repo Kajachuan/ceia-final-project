@@ -4,12 +4,30 @@ from torchmetrics import MetricCollection
 from torchmetrics.classification import BinaryAccuracy, BinaryJaccardIndex
 from segmentation_models_pytorch import create_model
 from segmentation_models_pytorch.losses import DiceLoss, FocalLoss
+from ..models import DUCKNet
+
+_SEGMENTATION_MODELS_NAMES = [
+    "unet",
+    "unetplusplus",
+    "manet",
+    "linknet",
+    "fpn",
+    "pspnet",
+    "deeplabv3",
+    "deeplabv3plus",
+    "pan",
+    "upernet",
+    "segformer",
+]
 
 class LightningSegmentation(LightningModule):
-    def __init__(self, model_name, encoder_name, loss_name):
+    def __init__(self, model_name: str, encoder_name: str, loss_name: str) -> None:
         super().__init__()
         self.save_hyperparameters()
-        self.model = create_model(arch=model_name, encoder_name=encoder_name)
+        if model_name.lower() in _SEGMENTATION_MODELS_NAMES:
+            self.model = create_model(arch=model_name, encoder_name=encoder_name)
+        elif model_name.lower() == "ducknet":
+            self.model = DUCKNet(in_channels=3, n_classes=1, starting_filters=17)
 
         if loss_name == 'dice':
             self.criterion = DiceLoss('binary')
