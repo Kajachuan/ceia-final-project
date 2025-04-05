@@ -21,13 +21,13 @@ _SEGMENTATION_MODELS_NAMES = [
 ]
 
 class LightningSegmentation(LightningModule):
-    def __init__(self, model_name: str, encoder_name: str, loss_name: str) -> None:
+    def __init__(self, model_name: str, encoder_name: str, loss_name: str, duck_filters: int = 17) -> None:
         super().__init__()
         self.save_hyperparameters()
         if model_name.lower() in _SEGMENTATION_MODELS_NAMES:
             self.model = create_model(arch=model_name, encoder_name=encoder_name)
         elif model_name.lower() == "ducknet":
-            self.model = DUCKNet(input_channels=3, out_classes=1, starting_filters=17)
+            self.model = DUCKNet(input_channels=3, out_classes=1, starting_filters=duck_filters)
 
         if loss_name == 'dice':
             self.criterion = DiceLoss('binary')
