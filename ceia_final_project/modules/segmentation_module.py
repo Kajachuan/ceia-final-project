@@ -30,7 +30,7 @@ class LightningSegmentation(LightningModule):
         elif model_name.lower() == "ducknet":
             self.model = DUCKNet(input_channels=3, out_classes=1, starting_filters=duck_filters)
         elif model_name.lower() == "ahnet":
-            self.model = AHNet(spatial_dims=2, in_channels=3, out_channels=1, pretrained=True)
+            self.model = AHNet(spatial_dims=2, in_channels=3, out_channels=1)
 
         if loss_name == 'dice':
             self.criterion = DiceLoss('binary')
