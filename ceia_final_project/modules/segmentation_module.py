@@ -4,7 +4,7 @@ from torchmetrics import MetricCollection
 from torchmetrics.classification import BinaryAccuracy, BinaryJaccardIndex
 from segmentation_models_pytorch import create_model
 from segmentation_models_pytorch.losses import DiceLoss, FocalLoss
-from monai.networks.nets import AHNet
+from monai.networks.nets import AHNet, SegResNet, SegResNetVAE
 from ..models import DUCKNet
 
 _SEGMENTATION_MODELS_NAMES = [
@@ -31,6 +31,10 @@ class LightningSegmentation(LightningModule):
             self.model = DUCKNet(input_channels=3, out_classes=1, starting_filters=duck_filters)
         elif model_name.lower() == "ahnet":
             self.model = AHNet(spatial_dims=2, in_channels=3, out_channels=1)
+        elif model_name.lower() == "segresnet":
+            self.model = SegResNet(spatial_dims=2, in_channels=3, out_channels=1, upsample_mode="deconv")
+        elif model_name.lower() == "segresnetvae":
+            self.model = SegResNetVAE(input_image_size=(256, 256), spatial_dims=2, in_channels=3, out_channels=1, upsample_mode="deconv")
 
         if loss_name == 'dice':
             self.criterion = DiceLoss('binary')
