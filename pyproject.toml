@@ -3,12 +3,12 @@ name = "ceia-final-project"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "Kevin Cajachuán",email = "kevincajachuan@hotmail.com"}
+    {name = "Kevin Cajachuán", email = "kevincajachuan@hotmail.com"}
 ]
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
-    'numpy==1.23.5',
+    'numpy==1.24.3',
     'torch==2.1.0',
     'torchvision==0.16.0',
     'lightning==2.5.1',
