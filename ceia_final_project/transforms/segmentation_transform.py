@@ -1,6 +1,7 @@
 import random
 import torchvision.transforms.v2.functional as F
 from torchvision.transforms import v2
+from ..constants import MEAN, STD
 
 class SegmentationTransform:
     def __init__(self, subset):
@@ -35,6 +36,6 @@ class SegmentationTransform:
             if random.random() > 0.5:
               img = self.gaussian_blur(img)
 
-        img = F.normalize(img, mean=[0.3555, 0.3374, 0.2294], std=[0.1790, 0.1094, 0.0960])
+        img = F.normalize(img, mean=MEAN, std=STD)
 
         return img, mask
