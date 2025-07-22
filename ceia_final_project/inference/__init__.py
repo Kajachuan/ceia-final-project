@@ -1,3 +1,3 @@
-from .predictor import Predictor
+from .segmenter import Segmenter
 
-__all__ = ["Predictor"]
+__all__ = ["Segmenter"]

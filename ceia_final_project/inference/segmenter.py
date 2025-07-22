@@ -4,7 +4,7 @@ from torchvision.transforms.v2.functional import normalize
 from ..constants import MEAN, STD
 from ..modules import LightningSegmentation
 
-class Predictor:
+class Segmenter:
     def __init__(self, checkpoint_path, threshold=0.5, normalize_input=True, device=None):
         self.module = LightningSegmentation.load_from_checkpoint(checkpoint_path)
         self.model = self.module.model
@@ -21,16 +21,19 @@ class Predictor:
         if self.normalize_input:
             image = normalize(image, mean=MEAN, std=STD)
 
-        # (C, H, W) -> (N, C, H, W) if single image
-        if image.dim() == 3:
-            image = image.unsqueeze(0)
+        is_single_image = image.dim() == 3  # (C, H, W)
+
+        if is_single_image:
+            image = image.unsqueeze(0)  # (1, C, H, W)
 
         with torch.no_grad():
             output = self.model(image)
             output = sigmoid(output)
             pred_mask = (output > self.threshold).float()
 
-        if pred_mask.size(0) == 1:
-            return pred_mask.squeeze(0).cpu()
+        pred_mask = pred_mask.cpu()
+
+        if is_single_image:
+            return pred_mask.squeeze(0).squeeze(0)  # (H, W)
         else:
-            return pred_mask.cpu()
+            return pred_mask.squeeze(1)  # (B, H, W)
